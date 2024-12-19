@@ -1,0 +1,67 @@
+{
+  "name": "zexson_toolkit",
+  "version": "1.0.8",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "signor_p",
+    "zexson_team",
+    "zexson team",
+    "zexson",
+    "toolkit",
+    "utilities",
+    "helpers",
+    "crypto",
+    "encryption",
+    "decryption",
+    "token",
+    "token-generation",
+    "random-token",
+    "secure-token",
+    "character-set",
+    "passwords",
+    "typescript",
+    "nodejs",
+    "secure",
+    "string-utils",
+    "text-utils",
+    "crypto-tools",
+    "data-security",
+    "secure-data",
+    "developer-tools",
+    "utility-library",
+    "node-utilities",
+    "typescript-helpers",
+    "custom-tools",
+    "secure-functions",
+    "random-functions",
+    "string-manipulation",
+    "data-tools",
+    "cli-tools",
+    "hashing",
+    "javascript-tools",
+    "toolkit-library",
+    "utility-functions",
+    "secure-encryption",
+    "typescript-library",
+    "developer-essentials",
+    "secure-library"
+  ],
+  "author": "signor_p",
+  "license": "MIT",
+  "description": "A powerful encryption and token generation library that provides secure string encryption, decryption and random token generation with customizable character sets. Perfect for creating secure tokens, passwords and encrypted data.",
+  "dependencies": {
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^16.18.122",
+    "typescript": "^4.9.5"
+  }
+}
