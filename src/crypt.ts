@@ -44,7 +44,7 @@ export const encrypt: encryptType = (data: string, options: { firstRandomCharSet
             const DataCharCode: number = char.charCodeAt(0)
             return String.fromCharCode((DataCharCode + 80) - 70)
         }).join(''), options.key)
-        if (decrypt(encrypted, { key: options.key }) === data) return encrypted
+        if (decrypt(encrypted, { key: options.key }) === data/*  && !/^(?:[^\\]*\\[^\\]*|[^\\]*\\\\[^\\]*)$/.test(encrypted) */) return encrypted
         else {
             encrypt(data, options)
         }
@@ -71,8 +71,9 @@ export const encrypt: encryptType = (data: string, options: { firstRandomCharSet
  */
 export const decrypt: decryptType = (data: string, options: { key?: string } | undefined = undefined): string => {
     try {
+        if (typeof data === 'undefined') return data
         if (options === undefined) options = { key: 'qwertyuioplkjhgfdsazxcvbnm' }
-        data = base64Decode(data.trim(), options.hasOwnProperty('key') ? options.key as string : 'secretKey').split('').map(char => {
+        data = base64Decode(data?.trim(), options.hasOwnProperty('key') ? options.key as string : 'secretKey')?.split('')?.map(char => {
             const DataCharCode: number = char.charCodeAt(0)
             return String.fromCharCode((DataCharCode - 80) + 70)
         }).join('')
@@ -177,6 +178,8 @@ export const base64Decode: base64DecodeType = (encryptedData: string, key: strin
  */
 export const isEqual: isEqualType = (text: string, text1: string, options?: IsEqualOptions | undefined): { isEqual: boolean; method?: string } => {
     try {
+        if (typeof text === 'undefined') return { isEqual: false, method: "Undefined" }
+        if (typeof text1 === 'undefined') return { isEqual: false, method: "Undefined" }
         let Text: string = text,
             Text1: string = text1,
             logMessage: string = ''
@@ -252,18 +255,20 @@ export const isEqual: isEqualType = (text: string, text1: string, options?: IsEq
  */
 export const encryptObject: cryptObject = <T extends Record<string, any>>(data: T, key: string = 'qwertyuioplkjhgfdsazxcvbnm'): T => {
     const encryptedData: T = {} as T
-    for (const [k, v] of Object.entries(data)) {
-        if (typeof v == 'string' || typeof v == 'number' || typeof v == 'boolean')
+    if (data == null) return data
+    for (const [k, v] of Object.entries(data == null ? {} : data)) {
+        if (typeof v == 'string' || typeof v == 'number' || typeof v == 'boolean' || typeof v == 'undefined')
             (encryptedData[k] as keyof T) = encrypt(String(v).toString().trim(), { key }) as string
         else if (Array.isArray(v)) {
             const encryptedArray: any[] = v.map(item => {
+                console.log(item)
                 if (typeof item === 'string' || typeof item == 'number') return encrypt(String(item), { key })
                 if (Array.isArray(item)) return item.map(subItem =>
                     typeof subItem === 'string' || typeof subItem === 'number' ? encrypt(String(subItem), { key }) :
                         Array.isArray(subItem) ? encryptObject({ arr: subItem }, key).arr :
                             typeof subItem === 'object' ? encryptObject(subItem, key) : subItem
                 )
-                if (typeof item === 'object') return encryptObject(item, key)
+                if (typeof item === 'object' && item !== null) return encryptObject(item, key)
                 return item
             })
                 ; (encryptedData[k] as keyof T) = encryptedArray as any
@@ -294,7 +299,8 @@ export const encryptObject: cryptObject = <T extends Record<string, any>>(data: 
  */
 export const decryptObject: cryptObject = <T extends Record<string, any>>(data: T, key: string = 'qwertyuioplkjhgfdsazxcvbnm'): T => {
     const decryptedData = {} as T
-    for (const [k, v] of Object.entries(data)) {
+    if (data == null) return data
+    for (const [k, v] of Object.entries(data == null ? {} : data)) {
         if (typeof v == 'string')
             (decryptedData[k] as keyof T) = decrypt(String(v).toString().trim(), { key }) as string
         else if (Array.isArray(v)) {

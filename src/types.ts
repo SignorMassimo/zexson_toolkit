@@ -150,3 +150,7 @@ export type isEqualType = (text: string, text1: string, options?: IsEqualOptions
  * @public
  */
 export type cryptObject = <T extends Record<string, any>>(data: T, key?: string) => T
+
+export type FieldDecoratorType = () => PropertyDecorator
+
+export type getFieldMetadataType = <T>(target: Record<string, any>) => { field: T, type: string }[]
